@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<gmp.h>
+#include<stdlib.h>
 
 
 #define DEBUG 0 // DEBUG flag
@@ -44,8 +45,28 @@ int encrypted_char_code(int char_code) {
     return ev;
 }
 
-int main() {
-    char text[] = "Hi Midhun";
+int main(int argc, char** argv) {
+   
+    char * text = (char *) malloc(sizeof(char) *2);
+    if(text == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 2;
+    }
+    int arg_counter =0;
+    while(arg_counter < argc) {
+        if(strcmp(argv[arg_counter], "-c") == 0) {
+            arg_counter++;
+            int str_len = strlen(argv[arg_counter]);
+            text = (char *) realloc(text, sizeof(char) * (str_len-1) );
+            strcpy(text, argv[arg_counter]);
+        }
+        arg_counter++; 
+    }
+
+    if(DEBUG) {
+        printf("string: %s \n", text);
+    }
+
     for(int i =0; i < strlen(text); i++) {
         printf("%x", encrypted_char_code(text[i]));
     }

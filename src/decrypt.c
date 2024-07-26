@@ -48,20 +48,32 @@ int decrypt_char_code(int char_code) {
 int main(int argc, char** argv) {
     // check the argument count is 3
     if(argc != 3) {
-        printf("Error: arguments missing\n");
+        fprintf(stderr, "Arguments missing\n");
         return 1;
-    }    
-
+    } 
+    
     // extarct the ciphar from argv
     // now we are only expecting ciphar so access value using index is fine.
-    // int arg_counter =0;
-    // while(arg_counter < argc) {
-    //     printf("%s\n", argv[arg_counter]);
-    //     arg_counter++;
-    // }
-    
-    char ciphar[] ="bb8c6b7c8c33c6b6ed87a8708bb";
-    
+    char * ciphar = (char *) malloc(sizeof(char) *2);
+    if(ciphar == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 2;
+    }
+    int arg_counter =0;
+    while(arg_counter < argc) {
+        if(strcmp(argv[arg_counter], "-c") == 0) {
+            arg_counter++;
+            int str_len = strlen(argv[arg_counter]);
+            ciphar = (char *) realloc(ciphar, sizeof(char) * (str_len-1) );
+            strcpy(ciphar, argv[arg_counter]);
+        }
+        arg_counter++; 
+    }
+
+    if(DEBUG) {
+        printf("string: %s \n", ciphar);
+    }
+   
     int expected_parts_chunks = strlen(ciphar)/3;
     int * parts = (int *) malloc(sizeof(int) * expected_parts_chunks);
     int parts_length = 0;
