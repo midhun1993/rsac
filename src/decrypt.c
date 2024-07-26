@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 void main() {
-    char string_encrypted[] = "884709b61b61263";
+    char string_encrypted[] = "bb85212e92e9889";
     int expected_parts_chunks = strlen(string_encrypted)/3;
     int * parts = (int *) malloc(sizeof(int) * expected_parts_chunks);
     int parts_length = 0;
