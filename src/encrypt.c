@@ -45,7 +45,7 @@ int encrypted_char_code(int char_code) {
 }
 
 int main() {
-    char text[] = "Hello";
+    char text[] = "Hi Midhun";
     for(int i =0; i < strlen(text); i++) {
         printf("%x", encrypted_char_code(text[i]));
     }
