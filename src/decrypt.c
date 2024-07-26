@@ -45,15 +45,30 @@ int decrypt_char_code(int char_code) {
     return ev;
 }
 
-void main() {
-    char string_encrypted[] = "bb85212e92e9889";
-    int expected_parts_chunks = strlen(string_encrypted)/3;
+int main(int argc, char** argv) {
+    // check the argument count is 3
+    if(argc != 3) {
+        printf("Error: arguments missing\n");
+        return 1;
+    }    
+
+    // extarct the ciphar from argv
+    // now we are only expecting ciphar so access value using index is fine.
+    // int arg_counter =0;
+    // while(arg_counter < argc) {
+    //     printf("%s\n", argv[arg_counter]);
+    //     arg_counter++;
+    // }
+    
+    char ciphar[] ="bb8c6b7c8c33c6b6ed87a8708bb";
+    
+    int expected_parts_chunks = strlen(ciphar)/3;
     int * parts = (int *) malloc(sizeof(int) * expected_parts_chunks);
     int parts_length = 0;
 
 
     char hex_str[4]= {0};
-    int len_string_encrypted = strlen(string_encrypted);
+    int len_string_encrypted = strlen(ciphar);
     int limit = len_string_encrypted + 1;
 
     int hex_length = 0;
@@ -64,7 +79,7 @@ void main() {
             parts_length++;
             hex_length = 0;
         }
-        hex_str[hex_length] = string_encrypted[i];
+        hex_str[hex_length] = ciphar[i];
         hex_length++;
     }
 
@@ -74,4 +89,5 @@ void main() {
     
     printf("\n");
     free(parts);
+    return 0;
 }
