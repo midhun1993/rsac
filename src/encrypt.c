@@ -13,7 +13,7 @@ int encrypted_char_code(int char_code) {
      */
     // hard coded will replace later
     int hardcoded_power = 5; 
-    int modulo = 12317;
+    int modulo = 11021;
     int ev;
 
     // default precision of gmp to avoid unwanted rounding
