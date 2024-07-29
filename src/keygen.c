@@ -34,19 +34,26 @@ bool is_prime( int n) {
 }
 
  int get_prime( int start, int forword) {
-   printf("%d - %d\n", start, forword);
+   // printf("%d - %d\n", start, forword);
    while(!is_prime(start)) {
-      printf("%d \n", start);
-      printf("%d \n",forword );
+      // printf("%d \n", start);
+      // printf("%d \n",forword );
       if(forword == 1) {
         start += 1;
       } else{
         start--;
-        printf("Here it come 2: %d\n", start);
+        //printf("Here it come 2: %d\n", start);
        
       }
    }
    return start;
+}
+
+int modInverse(int A, int M)
+{
+    for (int X = 1; X < M; X++)
+        if (((A % M) * (X % M)) % M == 1)
+            return X;
 }
 
 void main(int argc, char ** argv){
@@ -63,14 +70,14 @@ void main(int argc, char ** argv){
 
   int start = get_passpharse_prod(passpharse);
   int neg_start  = start  - 1;
-  printf("start : %d \n", start);
+  //printf("start : %d \n", start);
 
-  printf("first prime : %d\n", get_prime(start, 1));
-  printf("second prime : %d\n", get_prime(neg_start, 0));
+  printf("p : %d\n", get_prime(start, 1));
+  printf("q : %d\n", get_prime(neg_start, 0));
   int prime = get_prime(start, 1);
   int prime2 = get_prime(neg_start, 0);
   int product_of_prime  =  prime * prime2;
-   printf("prod prime : %d\n", product_of_prime);
+  printf("n : %d\n", product_of_prime);
 
    int max, lcm;
 
@@ -80,21 +87,23 @@ void main(int argc, char ** argv){
     // is divisible by x and y
     while (1) {
         if (max % (prime-1) == 0 && max % (prime2-1) == 0) {
-            printf("%d \n", max);
+            //printf("%d \n", max);
             lcm = max;
             break;
         }
 
         ++max;
     }
-    int coprime = 3;
+  printf("lcm: %d \n", lcm);
+    int coprime = 2;
     while (1) {
-      if((lcm % coprime) == 0 && is_prime(coprime)) {
+      if((lcm % coprime) != 0 && is_prime(coprime)) {
         break;
       }
       coprime++;
     }
-  printf("Coprime: %d \n", coprime);
-  printf("$LCM: %d \n", lcm);
+  printf("e: %d \n", coprime);
+  printf("d: %d \n", modInverse(coprime, lcm));
+ 
   
 }

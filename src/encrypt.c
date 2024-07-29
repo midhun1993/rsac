@@ -12,8 +12,8 @@ int encrypted_char_code(int char_code) {
      * This code is good mod only exist for int so we need to convert float to int
      */
     // hard coded will replace later
-    int hardcoded_power = 17; 
-    int modulo = 3233;
+    int hardcoded_power = 5; 
+    int modulo = 12317;
     int ev;
 
     // default precision of gmp to avoid unwanted rounding
