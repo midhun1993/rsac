@@ -4,23 +4,6 @@
 #include <stdbool.h>
 #include <gmp.h>
 
-// char * get_passpharse_prod (char * passpharse) {
-//   mpz_t accu;
-//   mpz_init(accu);
-//   char * accu_text = (char * )malloc(sizeof(char));
-
-//   for(int i = 0; i< strlen(passpharse); i++) {
-//     printf("value of unicode: %d\n",passpharse[i]);
-//     mpz_mul_ui(accu, accu, passpharse[i]);
-//   }
-
-//   gmp_printf("%Ld \n", accu);
-//   accu_text = mpz_get_str(accu_text, 2, accu);
-
-//   mpz_clear(accu);
-//   return accu_text;
-// }
-
 int get_passpharse_prod (char * passpharse) {
 
   int accu = 0;
@@ -28,7 +11,7 @@ int get_passpharse_prod (char * passpharse) {
     printf("value of unicode: %d\n",passpharse[i]);
     accu = accu + passpharse[i];
   }
-  return accu;
+  return accu/strlen(passpharse);
 }
 
 bool is_prime( int n) {
@@ -112,6 +95,6 @@ void main(int argc, char ** argv){
       coprime++;
     }
   printf("Coprime: %d \n", coprime);
-    printf("$LCM: %d \n", lcm);
+  printf("$LCM: %d \n", lcm);
   
 }
