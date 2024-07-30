@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
+#include <math.h>
 
 int num_from_ciphar(char *ciphar)
 {
@@ -167,6 +169,9 @@ int main(int argc, char **argv)
     int q = find_prime_from_num(random_number - 1, false);
     int n = p * q;
     int limit = lcm(p - 1, q - 1);
+    // Above calculation are right
+    // e and d should be calculated 
+
     int e = find_coprime(limit);
     int d = modular_inverse(e, limit);
 
@@ -179,6 +184,19 @@ int main(int argc, char **argv)
     printf("e: %d \n", e);
     printf("d: %d \n", d);
 
+    printf("Validation e and d \n");
+    assert(fmod(e *d, limit) == 1);
+
+    FILE *pk, *pubk;
+
+    pk = fopen("rsac.pk", "w");
+    pubk = fopen("rsac.pubk", "w");
+
+    fprintf(pk, "%d#%d\n", e, n);
+    fprintf(pubk, "%d#%d\n",d, n);
+
+    fclose(pk);
+    fclose(pubk);
     free(ciphar);
   }
 }

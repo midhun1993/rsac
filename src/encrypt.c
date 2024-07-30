@@ -8,12 +8,37 @@
 
 int encrypted_char_code(int char_code) {
 
+    // retrive the keys from here not the right way to do it.
+    // we willl do like now.
+
+    FILE *pk;
+    char cred[50];
+    pk = fopen("rsac.pk", "r");
+
+    if(pk == NULL) {
+        fprintf(stderr, "File not found\n");
+        return -1;
+    }
+
+    if(fgets(cred, sizeof(cred), pk) == NULL) {
+        if (feof(pk)) {
+            fprintf(stderr, "End of file reached or no data\n");
+        } else if (ferror(pk)) {
+            fprintf(stderr, "Error reading file\n");
+        }
+        fclose(pk);
+        return 1; // Exit the program with an error code
+    }
+    printf("%s\n", cred);       
+    fclose(pk);
+
+
     /**
      * This code is good mod only exist for int so we need to convert float to int
      */
     // hard coded will replace later
-    int hardcoded_power = 5; 
-    int modulo = 11021;
+    int hardcoded_power = 7; 
+    int modulo = 3233;
     int ev;
 
     // default precision of gmp to avoid unwanted rounding
