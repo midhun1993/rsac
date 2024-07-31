@@ -192,8 +192,8 @@ int main(int argc, char **argv)
     pk = fopen("rsac.pk", "w");
     pubk = fopen("rsac.pubk", "w");
 
-    fprintf(pk, "%d#%d\n", e, n);
-    fprintf(pubk, "%d#%d\n",d, n);
+    fprintf(pk, "%d#%d#\n", e, n);
+    fprintf(pubk, "%d#%d#\n",d, n);
 
     fclose(pk);
     fclose(pubk);

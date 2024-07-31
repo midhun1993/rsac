@@ -6,39 +6,19 @@
 
 #define DEBUG 0 // DEBUG flag
 
-int encrypted_char_code(int char_code) {
+int encrypted_char_code(int char_code, int *parts) {
 
-    // retrive the keys from here not the right way to do it.
-    // we willl do like now.
+    
 
-    FILE *pk;
-    char cred[50];
-    pk = fopen("rsac.pk", "r");
 
-    if(pk == NULL) {
-        fprintf(stderr, "File not found\n");
-        return -1;
-    }
-
-    if(fgets(cred, sizeof(cred), pk) == NULL) {
-        if (feof(pk)) {
-            fprintf(stderr, "End of file reached or no data\n");
-        } else if (ferror(pk)) {
-            fprintf(stderr, "Error reading file\n");
-        }
-        fclose(pk);
-        return 1; // Exit the program with an error code
-    }
-    printf("%s\n", cred);       
-    fclose(pk);
 
 
     /**
      * This code is good mod only exist for int so we need to convert float to int
      */
     // hard coded will replace later
-    int hardcoded_power = 7; 
-    int modulo = 3233;
+    int hardcoded_power = parts[0]; 
+    int modulo = parts[1];
     int ev;
 
     // default precision of gmp to avoid unwanted rounding
@@ -71,6 +51,54 @@ int encrypted_char_code(int char_code) {
 }
 
 int main(int argc, char** argv) {
+
+
+    // retrive the keys from here not the right way to do it.
+    // we willl do like now.
+
+    FILE *pk;
+    pk = fopen("rsac.pubk", "r");
+
+    if(pk == NULL) {
+        fprintf(stderr, "File not found\n");
+        return -1;
+    }
+
+    fseek(pk, 0, SEEK_END);
+    long fileSize = ftell(pk);
+    fseek(pk, 0, SEEK_SET);
+
+    char *file_content = malloc(fileSize + 1);
+    if (file_content == NULL) {
+        fprintf(stderr, "Error allocating memory");
+        fclose(pk);
+    }
+   
+    size_t bytesRead = fread(file_content, 1, fileSize, pk);
+
+    file_content[fileSize] = '\0';
+    fclose(pk);
+
+    // we have the file content here, we need to purse it
+    char token[50]; // for nown  i set the token size to 50
+    int part[2];
+    int part_inc = 0;
+    int token_inc = 0; 
+    for(int j = 0; j < strlen(file_content);j++ ) {
+        if(file_content[j] == '#' ) {
+                token_inc++;
+                token[token_inc] = '\0';
+                part[part_inc] = (int)atoi(token);
+                part_inc++;
+                token_inc = 0;
+                continue;
+        }
+        token[token_inc] = file_content[j];
+        token_inc++;
+    }
+
+     free(file_content);
+    printf("keys used d: %d, m:%d\n", part[0],  part[1]);
    
     char * text = (char *) malloc(sizeof(char) *2);
     if(text == NULL) {
@@ -93,7 +121,7 @@ int main(int argc, char** argv) {
     }
 
     for(int i =0; i < strlen(text); i++) {
-        printf("%x", encrypted_char_code(text[i]));
+        printf("%x", encrypted_char_code(text[i], part));
     }
     printf("\n");
     return 1;

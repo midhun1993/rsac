@@ -7,13 +7,13 @@
 
 #define DEBUG 0 // DEBUG flag
 
-int decrypt_char_code(int char_code) {
+int decrypt_char_code(int char_code, int *part) {
 /**
      * This code is good mod only exist for int so we need to convert float to int
      */
     // hard coded will replace later
-    int hardcoded_power = 223; 
-    int modulo = 3233;
+    int hardcoded_power = part[0]; 
+    int modulo = part[2];
     int ev;
 
     // default precision of gmp to avoid unwanted rounding
@@ -46,6 +46,51 @@ int decrypt_char_code(int char_code) {
 }
 
 int main(int argc, char** argv) {
+
+    FILE *pk;
+    pk = fopen("rsac.pk", "r");
+
+    if(pk == NULL) {
+        fprintf(stderr, "File not found\n");
+        return -1;
+    }
+
+    fseek(pk, 0, SEEK_END);
+    long fileSize = ftell(pk);
+    fseek(pk, 0, SEEK_SET);
+
+    char *file_content = malloc(fileSize + 1);
+    if (file_content == NULL) {
+        fprintf(stderr, "Error allocating memory");
+        fclose(pk);
+    }
+   
+    size_t bytesRead = fread(file_content, 1, fileSize, pk);
+
+    file_content[fileSize] = '\0';
+    fclose(pk);
+
+    // we have the file content here, we need to purse it
+    char token[50]; // for nown  i set the token size to 50
+    int part[2];
+    int part_inc = 0;
+    int token_inc = 0; 
+    for(int j = 0; j < strlen(file_content);j++ ) {
+        if(file_content[j] == '#' ) {
+                token_inc++;
+                token[token_inc] = '\0';
+                part[part_inc] = (int)atoi(token);
+                part_inc++;
+                token_inc = 0;
+                continue;
+        }
+        token[token_inc] = file_content[j];
+        token_inc++;
+    }
+
+     free(file_content);
+
+      printf("keys used d: %d, m:%d\n", part[0],  part[1]);
     // check the argument count is 3
     if(argc != 3) {
         fprintf(stderr, "Arguments missing\n");
@@ -96,7 +141,7 @@ int main(int argc, char** argv) {
     }
 
     for(int i = 0; i < expected_parts_chunks; i++) {
-         printf("%c", decrypt_char_code(parts[i]));
+         printf("%c", decrypt_char_code(parts[i], part));
     }
     
     printf("\n");
